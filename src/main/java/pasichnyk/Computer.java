@@ -1,10 +1,9 @@
 package pasichnyk;
 
-import pasichnyk.ElectronicsProduct;
-
 public class Computer extends ElectronicsProduct {
 
-    private final int discountProcentFromPrise = 5;
+    private final int discountProcent = 95;
+
     public Computer(String name, double price, int quantity, AgeRestriction ageRestriction, int garanteePerion) {
         super(name, price, quantity, ageRestriction, garanteePerion = 24);
     }
@@ -12,10 +11,9 @@ public class Computer extends ElectronicsProduct {
 
     @Override
     public double getPrise() {
-        if (getQuantity()>1000)
-            return getPrice()*(100-discountProcentFromPrise/100);
+        if (getQuantity() >= 1000)
+            return getPrice() * discountProcent / 100;
         else
-        return getPrice()
-                ;
+            return getPrice();
     }
 }
