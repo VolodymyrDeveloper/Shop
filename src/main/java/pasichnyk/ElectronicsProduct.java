@@ -4,7 +4,7 @@ public abstract class ElectronicsProduct extends Product{
 
     int garanteePerion;
 
-    public ElectronicsProduct(String name, double price, int quantity, AgeRestriction ageRestriction, int garanteePerion) {
+    public ElectronicsProduct(String name, double price, int quantity, AgeRestriction ageRestriction) {
         super(name, price, quantity, ageRestriction);
         this.garanteePerion = garanteePerion;
     }

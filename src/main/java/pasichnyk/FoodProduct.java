@@ -2,46 +2,68 @@ package pasichnyk;
 
 import pasichnyk.ProductInterface.Expirable;
 
+import javax.xml.crypto.Data;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.Date;
-import java.time.temporal.ChronoUnit;
-import java.util.Objects;
+import java.util.Locale;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class FoodProduct extends Product implements Expirable {
 
     private final double procentDiscount = 70;
-    private final Date expirationDate;
+
+    SimpleDateFormat formatDate = new SimpleDateFormat("MM/dd/yyyy", Locale.UK);
 
 
-    public FoodProduct(String name, double price, int quantity, AgeRestriction ageRestriction, Date expirationDate) {
+
+    private Date expirDate;
+
+
+
+
+
+    public Date getExpirDate() {
+        return expirDate;
+    }
+
+        public void setExpirDate(Date expirDate) throws ParseException {
+        this.expirDate = formatDate.parse(expirDate.toString());
+    }
+    public FoodProduct(String name, double price, int quantity, AgeRestriction ageRestriction) {
         super(name, price, quantity, ageRestriction);
-        this.expirationDate = expirationDate;
+        this.expirDate = expirDate;
 
     }
+
+    public long calculateExpirationDays(){
+
+    }
+
+
 
     @Override
-    public Date getExpirationDate() {
-      return expirationDate;
-    }
+    public Date getExpirationDate() throws ParseException {
+
+        Date data = formatDate.parse(new Date().toString());
+
+        return getExpirDate();
+       }
 
 
     @Override
-    public double getPrise() {
-        java.util.Date date = new java.util.Date();
-        long daysExpiration = DAYS.between(date.toInstant(), expirationDate.toInstant());
-        if (daysExpiration<=15){
-            return getPrice() * procentDiscount / 100;}
-        else return getPrice();
+    public double getPrice() {
+        Date data = new Date();
+        long days = data.getTime()-expirDate.getTime();
+        if (days<=15){
+            return getPriceProduct() * procentDiscount / 100;}
+        else
+            return getPriceProduct();
     }
 
-    @Override
-    public String toString() {
-        return "FoodProduct{" +
-                "procentDiscount=" + procentDiscount +
-                ", expirationDate=" + expirationDate +
-                '}';
-    }
+
 
 }
