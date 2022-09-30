@@ -2,68 +2,59 @@ package pasichnyk;
 
 import pasichnyk.ProductInterface.Expirable;
 
-import javax.xml.crypto.Data;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
 import java.util.Date;
-import java.util.Locale;
-
-import static java.time.temporal.ChronoUnit.DAYS;
 
 public class FoodProduct extends Product implements Expirable {
 
     private final double procentDiscount = 70;
 
-    SimpleDateFormat formatDate = new SimpleDateFormat("MM/dd/yyyy", Locale.UK);
+    private String expirDate;
 
+    SimpleDateFormat formatDate = new SimpleDateFormat("MM/dd/yyyy");
 
+    public FoodProduct(String name, double priceProduct, int quantity, AgeRestriction ageRestriction, String expirDate) {
+        super(name, priceProduct, quantity, ageRestriction);
+        this.expirDate = expirDate;
+    }
 
-    private Date expirDate;
+    public FoodProduct(String name, double price, int quantity, AgeRestriction ageRestriction) {
+        super(name, price, quantity, ageRestriction);
+    }
 
-
-
-
-
-    public Date getExpirDate() {
+    public String getExpirDate() {
         return expirDate;
     }
 
-        public void setExpirDate(Date expirDate) throws ParseException {
-        this.expirDate = formatDate.parse(expirDate.toString());
-    }
-    public FoodProduct(String name, double price, int quantity, AgeRestriction ageRestriction) {
-        super(name, price, quantity, ageRestriction);
+    public void setExpirDate(String expirDate) {
         this.expirDate = expirDate;
-
     }
-
-    public long calculateExpirationDays(){
-
-    }
-
-
 
     @Override
     public Date getExpirationDate() throws ParseException {
+        Date data = formatDate.parse(expirDate);
+        return data;
+    }
 
-        Date data = formatDate.parse(new Date().toString());
+    public long culcDaysSuitabilityofProduct() throws ParseException {
+        Date data = new Date();
+        long days = getExpirationDate().getTime() - data.getTime();
+        long daysSuitabilityofProduct = (days / (1000 * 60 * 60 * 24));
+        return daysSuitabilityofProduct;
+    }
 
-        return getExpirDate();
-       }
 
 
     @Override
-    public double getPrice() {
-        Date data = new Date();
-        long days = data.getTime()-expirDate.getTime();
-        if (days<=15){
-            return getPriceProduct() * procentDiscount / 100;}
+    public double getPrice() throws ParseException {
+        if (culcDaysSuitabilityofProduct() <= 15)
+            return getPriceProduct() * procentDiscount / 100;
         else
             return getPriceProduct();
     }
 
 
-
 }
+
+
